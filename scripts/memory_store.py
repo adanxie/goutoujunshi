@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import sqlite3
 import sys
 import uuid
@@ -36,23 +35,6 @@ SOURCE_TYPES = {
     "assistant_inference",
 }
 CONFIDENCE_LEVELS = {"high", "medium", "low"}
-FORBIDDEN_FIELD_PARTS = {
-    "address",
-    "bank",
-    "card_number",
-    "credential",
-    "diagnosis",
-    "email",
-    "id_card",
-    "medical",
-    "password",
-    "phone",
-    "sexual_detail",
-    "token",
-}
-EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
-PHONE_RE = re.compile(r"(?<!\d)1[3-9]\d{9}(?!\d)")
-CN_ID_RE = re.compile(r"(?<!\d)\d{17}[0-9Xx](?!\d)")
 
 
 class MemoryErrorWithCode(RuntimeError):
@@ -200,14 +182,6 @@ def validate_delta(raw: dict[str, Any]) -> dict[str, Any]:
     occurred_at = validate_text(
         "occurred_at", raw.get("occurred_at", ""), 64, required=False
     )
-    if raw.get("sensitive") is True:
-        raise MemoryErrorWithCode("SENSITIVE_REJECTED", "高敏感信息不得写入长期记忆")
-    lowered_field = field.lower()
-    if any(part in lowered_field for part in FORBIDDEN_FIELD_PARTS):
-        raise MemoryErrorWithCode("SENSITIVE_REJECTED", "该字段不允许进入长期记忆")
-    if EMAIL_RE.search(value) or PHONE_RE.search(value) or CN_ID_RE.search(value):
-        raise MemoryErrorWithCode("SENSITIVE_REJECTED", "检测到联系方式或证件号")
-
     if scope == "user" and source_type != "user_explicit":
         raise MemoryErrorWithCode(
             "SOURCE_NOT_ELIGIBLE", "用户稳定档案只接受用户明确陈述"
