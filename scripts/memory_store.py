@@ -245,7 +245,7 @@ def validate_delta(raw: dict[str, Any]) -> dict[str, Any]:
 def prune_operation_history(conn: sqlite3.Connection) -> None:
     conn.execute(
         "DELETE FROM operations WHERE op_id NOT IN ("
-        "SELECT op_id FROM operations ORDER BY created_at DESC LIMIT ?)",
+        "SELECT op_id FROM operations ORDER BY created_at DESC, rowid DESC LIMIT ?)",
         (MAX_OPERATIONS,),
     )
 
@@ -374,8 +374,17 @@ def command_apply(args: argparse.Namespace) -> None:
         before: list[dict[str, Any]] = []
         was_update = False
         if delta["scope"] == "event":
-            memory_id = uuid.uuid4().hex
-            created_at = timestamp
+            existing_rows = conn.execute(
+                "SELECT * FROM memories WHERE scope = 'event' AND subject_id = ? "
+                "AND field = ? AND occurred_at IS ? AND status = 'active' "
+                "ORDER BY updated_at DESC, rowid DESC",
+                (delta["subject_id"], delta["field"], delta["occurred_at"]),
+            ).fetchall()
+            existing = existing_rows[0] if existing_rows else None
+            if existing_rows:
+                before.extend(row_dict(row) for row in existing_rows)
+                for duplicate in existing_rows[1:]:
+                    conn.execute("DELETE FROM memories WHERE id = ?", (duplicate["id"],))
         else:
             existing = conn.execute(
                 "SELECT * FROM memories WHERE scope = ? AND subject_id = ? "
@@ -384,12 +393,13 @@ def command_apply(args: argparse.Namespace) -> None:
             ).fetchone()
             if existing:
                 before.append(row_dict(existing))
-                memory_id = existing["id"]
-                created_at = existing["created_at"]
-                was_update = True
-            else:
-                memory_id = uuid.uuid4().hex
-                created_at = timestamp
+        if existing:
+            memory_id = existing["id"]
+            created_at = existing["created_at"]
+            was_update = True
+        else:
+            memory_id = uuid.uuid4().hex
+            created_at = timestamp
         row = {
             "id": memory_id,
             **delta,
@@ -466,7 +476,7 @@ def command_undo(args: argparse.Namespace) -> None:
             ).fetchone()
         else:
             operation = conn.execute(
-                "SELECT * FROM operations ORDER BY created_at DESC LIMIT 1"
+                "SELECT * FROM operations ORDER BY created_at DESC, rowid DESC LIMIT 1"
             ).fetchone()
         if not operation:
             raise MemoryErrorWithCode("NOTHING_TO_UNDO", "没有可撤销的记忆更新")
