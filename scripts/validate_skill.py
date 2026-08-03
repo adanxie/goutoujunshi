@@ -125,10 +125,28 @@ def validate_routes_and_regressions(runtime_only: bool) -> None:
             "默认只读取当前问题直接需要的 1–3 份参考",
             "references/practical/ChatLab聊天记录分析适配.md",
             "references/practical/长期记忆与关系档案.md",
+            "references/knowledge/04-MBTI人格与匹配.md",
+            "references/knowledge/02-亲密关系心理学总论.md",
         )
         for route in required_routes:
             if route not in content:
                 ERRORS.append(f"SKILL.md missing required progressive-disclosure route: {route}")
+
+        regression_markers = (
+            "最迟前两轮",
+            "主观综合评分 0–100",
+            "不主动追加年龄、城市、职业、收入",
+            "沟通偏好、决策方式、推进节奏和话术",
+            "第一屏先给一条自然、简短、可复制的话术",
+            "锁定“用户／对象”的说话人映射",
+            "不声称能直接读取、解密或导出",
+            "首次明确同意后才启用",
+            "不从姓名、MBTI、旧案例或模型推测补事实",
+            "普通暧昧、复联、约会、投入和婚姻选择不反复安全说教",
+        )
+        for marker in regression_markers:
+            if marker not in content:
+                ERRORS.append(f"SKILL.md missing required behavior boundary: {marker}")
 
 def validate_runtime_boundaries() -> None:
     if (ROOT / ".git").exists():
