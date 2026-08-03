@@ -133,6 +133,13 @@ def validate_routes_and_regressions(runtime_only: bool) -> None:
                 ERRORS.append(f"SKILL.md missing required progressive-disclosure route: {route}")
 
         regression_markers = (
+            "## 每次分析",
+            "**情绪落地**",
+            "**事实拆分**",
+            "**利益判断**",
+            "**明确建议**",
+            "**行动收束**",
+            "观察窗口或停止条件",
             "最迟前两轮",
             "主观综合评分 0–100",
             "不主动追加年龄、城市、职业、收入",
