@@ -1,4 +1,4 @@
 interface:
   display_name: "狗头军师"
-  short_description: "安抚恋爱情绪，结合MBTI与聊天证据给主动策略并维护可撤销记忆"
-  default_prompt: "使用 $goutoujunshi 帮我梳理关系，结合双方MBTI和聊天证据给出主动策略与可发送话术。"
+  short_description: "安抚恋爱情绪，分析聊天与多人关系，并维护可撤销记忆"
+  default_prompt: "使用 $goutoujunshi 帮我梳理情绪、分析当前关系，并给出下一步建议。"

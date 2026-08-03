@@ -126,7 +126,6 @@ def validate_routes_and_regressions(runtime_only: bool) -> None:
             "references/practical/ChatLab聊天记录分析适配.md",
             "references/practical/长期记忆与关系档案.md",
             "references/knowledge/04-MBTI人格与匹配.md",
-            "references/knowledge/02-亲密关系心理学总论.md",
         )
         for route in required_routes:
             if route not in content:
@@ -144,10 +143,7 @@ def validate_routes_and_regressions(runtime_only: bool) -> None:
             "你：MBTI / 主观综合评分0–100 / 主要优势和短板",
             "对象A：代号 / MBTI / 主观综合评分0–100 / 当前关系",
             "经过：认识方式、发展多久、最近三件关键事件、联系和双方投入",
-            "沟通偏好、决策方式、推进节奏和话术",
-            "一次拒绝具体邀约不自动终止推进",
-            "情境性拒绝可在条件变化后再给一次低压力方案",
-            "明确表示不想发展、要求不要再联系或反复表示不欢迎时停止推进",
+            "明确表示不想发展、要求不要联系或反复表示不欢迎时停止推进",
             "第一屏先给一条可复制成品",
             "发送时机、主要代价和积极／含糊／不回应的后续",
             "锁定“用户／对象”的说话人映射",
