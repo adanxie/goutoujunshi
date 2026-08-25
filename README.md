@@ -6,6 +6,8 @@
 
 [![GitHub Stars](https://img.shields.io/github/stars/powerycy/goutoujunshi?style=social)](https://github.com/powerycy/goutoujunshi/stargazers)
 
+本项目由 [升级打怪开源社区](https://github.com/powerycy/shengjidaguai) 维护。欢迎访问社区仓库，参与交流与共建。
+
 如果它让你在感情里少一次内耗、多一次清醒，欢迎点亮一个🌟 **Star**。你的支持会让更多正在关系里犹豫的人找到它，也会推动知识库继续更新。
 
 很多恋爱建议只有两个答案：“勇敢去追”或“赶紧分手”。狗头军师试图做得更认真一点：先接住用户的情绪，再把事实、猜测和未知拆开；既分析心动，也计算现实、互惠、风险、机会成本和长期选择权；最后给出可以真正执行的下一步。
